@@ -1,2 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {         
+            font-family: "Helvetica", sans-serif;
+            background: rgb(243,0,255);
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            animation: gradient 15s ease infinite;
+            background-size: 400% 600%;     
+        }
 
-<div> hello </div>
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        #spa {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        #content {
+            display: flex;
+            justify-content: center;
+            width: 80%;
+        }
+        .login-page {
+            margin-top: 15%;
+            width: 250px;
+        }
+        .error-page {
+            margin-top: 15%;
+            font-size: 20px;          
+            display: flex;
+            flex-direction: column;
+            align-content: center;
+            justify-content: center;
+            background-color: white;
+            padding: 40px;        
+            border-radius: 45px;
+        }
+
+        .login-page, .menu-page, 
+        .options-page {
+            font-size: 15px;          
+            display: flex;
+            flex-direction: column;
+            align-content: center;
+            justify-content: center;
+            background-color: white;
+            padding: 40px;        
+            border-radius: 45px;
+            /* box-shadow: 0 0 600px 600px rgb(0 0 0 / 50%); */
+        }
+        .register-form, .login-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        .login-page button {
+            border: none;
+            min-width: 90%;
+            height: 40px;
+            cursor: pointer;
+            margin-top: 10%;
+            border-radius: 45px;
+            font-family: "Roboto", sans-serif;
+            font-weight: bold;
+            color: white;
+            font-size: 16px;
+            background-size: 300% 100%;
+            transition: all 2s ease-in-out;
+            background-image: linear-gradient(
+                to right,
+                #ee7752, #e73c7e, #23a6d5, #23d5ab
+                );
+            box-shadow: 0 4px 15px 0 rgba(126, 52, 161, 0.75);
+        }
+        .login-page button:hover, 
+        .login-page button:active {
+            transition: all 2s ease-in-out;
+            background-position: 100% 0;
+        }
+        .register-form input, 
+        .login-form input {
+            width: 100%;
+            height: 40px;
+            border-radius: 0%;
+            border: none;
+            border-bottom: 2px black solid;         
+            padding-left: 10px;
+            box-sizing: border-box;
+            font-family: "Roboto", sans-serif;
+        } 
+        .form-name {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        /* МЕНЮ */
+        .menu-page {
+            min-width: 40%;
+            height: fit-content;
+            text-align: center;
+            font-size: 25px;
+            gap: 10px;
+        }
+
+        .menu-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 35px;
+        }
+        .mode-type {     
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: space-evenly;
+            margin-bottom: 30px;
+        }
+        .mode-type img {
+            width: 60px;
+            height: 60px;
+        }
+        .mode-type > div {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-size: 400% 100%;
+            transition: all 0.5s ease-in-out;
+            background-image: linear-gradient(
+                to right,
+                #fff, #fff, rgba(126, 52, 161, 0.13)
+                );
+            box-shadow: 0 4px 15px 0 rgba(126, 52, 161, 0.384);
+            width: 100px;
+            padding: 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            color: black;
+        } 
+        .mode-type > div:hover, 
+        .mode-type > div:active {
+            transition: all 0.5s ease-in-out;
+            background-position: 100% 0;
+        }
+        .menu-list div a {
+            text-decoration: none;
+            color: black;
+        }
+
+        /* Опции */
+
+        .options-page {
+            text-align: center;
+            font-size: 20px;
+            margin-top: 12%;
+            width: 420px;
+        }
+        .options-page h2 {
+            margin: 0px;
+            padding: 10px 0 20px 0;
+
+        }
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .opt {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 20px;
+        }
+        .options-list div img {
+            width: 45px;
+            height: 45px;
+        }
+        .about-game div {
+            text-align: left;      
+            padding: 10px 0;    
+        }
+        .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+        }
+
+        /* Hide default HTML checkbox */
+        .switch input {
+        display: none;
+        }
+
+        /* The slider */
+        .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+        }
+
+        .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+        }
+
+        input:checked + .slider {
+        background-color: #2196F3;
+        }
+
+        input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+        border-radius: 34px;
+        }
+
+        .slider.round:before {
+        border-radius: 50%;
+        }
+
+        .options-list {
+            position: relative;
+        }
+
+        .options-switch {
+            position: absolute;
+            right: 0px;
+        }
+        #about-more {
+            text-decoration: none;
+            color: black;
+        }
+
+        .info {
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        /* РЕГИОНЫ */
+
+        .regions-page {
+            font-size: 17px;          
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-wrap: wrap;
+            background-color: white;
+            padding: 2%;
+            border-radius: 45px;
+        }
+        .regions-page h2 {
+            text-align: center;
+            font-size: 27px;
+            margin: 0px; 
+            padding: 0px;
+            padding: 30px 0 40px 0;
+        }
+
+        .regions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .top-row, .bottom-row {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 10px;
+        }
+        .world-row {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .world-row div {
+            text-align: center;
+            border-radius: 20px;
+            padding: 2%;   
+            transition: all 0.5s;
+            box-sizing: border-box;
+        }
+
+        .world-row img {
+            border-radius: 50%;
+            width: 250px;
+            height: 250px;
+            cursor: pointer;
+        }
+        
+        .top-row div, .bottom-row div, .world-row div {
+            text-align: center;
+            border-radius: 20px;
+            padding: 2%;
+            width: 50%;     
+            background-size: 300% 100%;   
+            transition: all 0.2s;         
+            transition: all 0.5s ease-in-out;
+        }
+        .top-row div:hover, .bottom-row div:hover, .world-row div:hover {
+            transition: all 0.5s ease-in-out;         
+            box-shadow: 0 4px 15px 0 rgba(52, 161, 159, 0.245);
+        }
+
+        .top-row div img, .bottom-row div img {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            cursor: pointer;
+        }
+
+        /* ГЕЙМПЛЕЙ */
+        .game-page {
+            font-size: 17px;          
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-wrap: wrap;
+            width: 100%;
+            padding: 4%;
+            background-color: white;
+            border-radius: 45px;           
+        }
+        .gameplay {
+            width: 100%;
+        }
+
+        #chartdiv {
+            height: 70vh;
+        } 
+        
+        .current-country {
+            text-align: center;
+        }
+
+    
+
+        /* РЕКОРДЫ */
+
+        .records-page {
+            font-size: 15px;          
+            margin-top: 12%;
+            display: flex;
+            flex-direction: column;       
+            align-items: center;
+            background-color: white;
+            min-width: 40%;
+            padding: 40px;
+            border-radius: 45px;
+            gap: 15px;
+        }
+        #mode-name {
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        #maps-select {
+            padding: 10px 15px;
+            border-radius: 25px;
+            width: 70%;
+            font-size: 13px;
+            border: 1px solid #eb508b4e;
+        }
+
+        #change-type {
+            padding: 10px 15px;
+            border: 1px solid #eb508b4e;
+            color: white;
+            font-size: 14px;
+            border-radius: 25px;
+            background-size: 400% 500%;
+            cursor: pointer;
+            background-image: linear-gradient(
+                to right,
+                #3f5efb, #fc466b, #eb896c
+                );
+        }
+        #change-type:hover {
+            transition: all 0.5s ease-in-out;
+            background-position: 100% 0;
+        }
+
+        .table tbody td a {
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            min-width: 50%;
+            line-height: 30px;
+            padding: 0 10px;
+            color: white;
+            font-size: 14px;
+            border-radius: 15px;
+            background-size: 400% 500%;
+            background-image: linear-gradient(
+                to right,
+                #eb896c, #eb508b,#d52323, #d52323
+                );
+         
+        }
+        .table tbody td a:hover {
+            transition: all 0.5s ease-in-out;
+            background-position: 100% 0;
+        }
+
+        .table tr td {
+            width: 10%;
+        }
+
+        .table tbody tr:nth-child(even){
+            background: #ee76521c;
+        }
+        .table tbody tr td:last-child {
+            border-right: none;
+            text-align: center;
+        }
+        
+
+        .animate {
+            animation: hint 15s ease infinite;
+        }
+        
+        @keyframes hint {
+            0% {
+                transform: rotate(-10deg);
+            }       
+            100% {
+                transform: rotate(10deg);
+            }
+        }
+        
+        #header {
+            display: flex;
+            flex-direction: column;        
+            justify-content: center;
+            height: 20%;
+        }
+
+        #header a img {
+            height: 50px;
+            width: 50px;
+            font-size: 28px;
+            color: black;
+            text-decoration: none;
+            background-color: white;
+            padding: 20px;
+            border-radius: 25px;
+            background-size: 400% 100%;
+            transition: all 0.5s ease-in-out;
+            background-image: linear-gradient(
+                to right,
+                #fff, #fff, rgba(126, 52, 161, 0.13)
+                );
+            box-shadow: 0 4px 15px 0 rgba(126, 52, 161, 0.384);
+        }
+        #header a img:hover {
+            transition: all 0.5s ease-in-out;
+            background-position: 100% 0;
+        }
+
+        #nav-menu {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .hidden {            
+            display: none;
+        }
+
+        .wrap {
+            height: 0px;
+            opacity: 0;
+        }
+        
+        @media only screen 
+        and (max-width: 710px) {
+
+            #content {
+                width: 90%;
+            }
+
+            .menu-page{
+                padding: 12%;
+            }
+            .options-page {
+                padding: 8%;
+                width: 70%;
+            }
+            .top-row, .bottom-row, .world-row {
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;           
+            }
+
+            .world-row img {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            cursor: pointer;
+            }
+
+            .top-row div, .bottom-row div, .world-row div {
+            width: 100%;     
+            background-size: 300% 100%;   
+            transition: all 0.2s;         
+            transition: all 0.5s ease-in-out;
+            }
+
+            #maps-select {
+            width: 100%;
+            font-size: 13px;
+            border: 1px solid #eb508b4e;
+            }
+            .game-page {
+                padding: 0px;
+            }
+            .info {
+            padding: 0 7%;
+            } 
+            #region-name {
+                padding-top: 2%;
+            }
+            #hi-name {
+                font-size: 25px;
+                padding: 0px;
+            }
+       
+        }
+
+    </style>
+</head>
+<body>
+
+    
+
+    
+  <div id="spa" class="app"></div>
+
+  <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <script defer src="js/fireBase.js"></script>
+
+
+    <script defer src="js/components.js"></script>
+    <script defer src="js/pages.js"></script>
+    <script defer src="js/index.js"></script>
+
+    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/map.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/geodata/data/countries2.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/geodata/worldLow.js"></script> 
+    <script src="https://cdn.amcharts.com/lib/5/geodata/worldUltra.js"></script> 
+    <script src="https://cdn.amcharts.com/lib/5/geodata/lang/RU.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/world_countries_lists@latest/data/countries/ru/countries.json"></script>
+    
+   
+
+
+</body>
+</html>
