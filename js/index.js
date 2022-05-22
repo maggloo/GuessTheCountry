@@ -685,20 +685,23 @@ const mySPA = (function() {
         let email = userEmail.trim();
         let password = userPass.trim();
           firebase.auth().createUserWithEmailAndPassword(email, password)
-          .then(function (userName) {
+          .then(function (userName,userEmail) {
+            
             that.addUser(name, email);
-            localStorage.setItem(`user`, name.toLowerCase());
-            myModuleView.setUserName(username);
-            myModuleView.sayHi(username);
-            myModuleView.playSound('click');
+            // localStorage.setItem(`user`, name.toLowerCase());
 
-            that.updateState('menu');
+            // that.updateState('menu');
+            // myModuleView.setUserName(name);
+            // myModuleView.sayHi(name);
+            // myModuleView.playSound('click');
+
+            
            
-            console.log(`Пользователь ${userName} добавлен в коллецию users`);
+            console.log(`Пользователь ${name} добавлен в коллецию users`);
           })
           .then(function (userName, userEmail) {
-            // that.login(email, password);
-            console.log(`Пользователь ${userName} залогинен в коллецию users`);
+            that.loginUser(email, password);
+            console.log(`Пользователь ${name} залогинен в коллецию users`);
           })
           .catch(function(error) {
             // Handle Errors here.
@@ -733,22 +736,22 @@ const mySPA = (function() {
           
           firebase.auth().onAuthStateChanged(function(user) {
             let userData = null, userDataName = null, username = null;
-            console.log('success');
             if (user) {
-              console.log(user.email);
               myDBRef.child("users").orderByChild("email").equalTo(`${user.email}`).once("value",snapshot => {
                 if (snapshot.exists()){
-                  // debugger;
                   userData = snapshot.val();
                   userDataName = Object.keys(userData);
                   username = currentUserName = userData[userDataName].username;
-                  // let currentUserName;
-                  localStorage.setItem('user', username);
+                  
+                  console.log(username);
                   myModuleView.setUserName(username);
+                  that.updateState('menu');
+                  myModuleView.sayHi(username);
+                  localStorage.setItem('user', username);
+                  
                   that.playSound('click');
                   // myModuleView.setUserName(username);
-                  that.updateState('menu');
-                
+                  
                   
                   // loggedUser = that.getUserFromLocalStorage();
 
