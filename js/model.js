@@ -68,6 +68,27 @@ function ModuleModel () {
       }
     }
 
+    this.playAudio = function(id, state) {
+      if (id === "checkMusic") {
+        let checkboxStateMusic = {
+           [id]: state
+        };
+        localStorage.setItem("checkboxStateMusic", JSON.stringify(checkboxStateMusic)); 
+        myModuleView.playMusic(state);
+      } else if (id === "checkSounds") {
+        let checkboxStateAudio = {
+          [id]: state
+       };
+       localStorage.setItem("checkboxStateAudio", JSON.stringify(checkboxStateAudio)); 
+       myModuleView.playAudio(state);
+      }               
+    }
+
+    this.playSound = function(sound) {
+      this.getAudios();
+      myModuleView.playSound(sound);
+    }
+
     this.getUserFromLocalStorage = function() {
       if (typeof localStorage !== "undefined") {
         return localStorage.getItem("user");
@@ -83,6 +104,7 @@ function ModuleModel () {
         return false;
       }
     }
+
     this.getSoundsFromLocalStorage = function(){
       if (typeof localStorage !== "undefined") {
         return JSON.parse(window.localStorage.getItem("checkboxStateAudio"));
@@ -101,22 +123,6 @@ function ModuleModel () {
 
     this.checkToggle = function(sounds, music) {     
       myModuleView.toggleState(sounds, music);      //актуальные значения свитчеров
-    }
-
-    this.playAudio = function(id, state) {
-      if (id === "checkMusic") {
-        let checkboxStateMusic = {
-           [id]: state
-        };
-        localStorage.setItem("checkboxStateMusic", JSON.stringify(checkboxStateMusic)); 
-        myModuleView.playMusic(state);
-      } else if (id === "checkSounds") {
-        let checkboxStateAudio = {
-          [id]: state
-       };
-       localStorage.setItem("checkboxStateAudio", JSON.stringify(checkboxStateAudio)); 
-       myModuleView.playAudio(state);
-      }               
     }
 
     this.toggleAbout = function() {
@@ -187,7 +193,6 @@ function ModuleModel () {
 
           } else {
             localStorage.removeItem("user");
-            console.log("Bye Bye!"); 
             that.updateState('login');   
           }
         });
@@ -265,6 +270,9 @@ function ModuleModel () {
         score: `${score}`,
         username:`${currentUserName}`,
       })      
+      .then(function(){
+        myModuleView.showAlert("Счет был внесен в таблицу рекордов.");
+      })
       .catch(function (error) {
         console.error("Ошибка добавления информации: ", error);
       }); 
@@ -287,11 +295,6 @@ function ModuleModel () {
         classTextContent= "Карты";
       }
       myModuleView.changeMode(newButton, newClass, classTextContent)
-    }
-
-    this.playSound = function(sound) {
-      this.getAudios();
-      myModuleView.playSound(sound);
     }
 
     this.swithForm = function() {
