@@ -58,6 +58,16 @@ function ModuleController () {
         );
       }
 
+      if (event.target.classList.contains("updateScore")){
+        if (myModuleContainer.querySelector('#score')){
+          let currentScore = myModuleContainer.querySelector('#score');
+          if (+currentScore.textContent > 0) {
+            myModuleModel.recordScore(+currentScore.textContent, currentScore.className);
+          }
+        }
+      }
+      
+
       if (event.target.classList.contains("get-flag") || event.target.classList.contains("get-map")){
         myModuleModel.saveRegion(event.target.id);
       }
@@ -76,14 +86,8 @@ function ModuleController () {
         event.stopPropagation();
         myModuleModel.playSound('click');
         myModuleModel.toggleAbout();
-      } 
+      }       
       
-      if (myModuleContainer.querySelector('#score')){
-        let currentScore = myModuleContainer.querySelector('#score');
-        if (+currentScore.textContent > 0) {
-          myModuleModel.recordScore(+currentScore.textContent, currentScore.className);
-        }
-      }
 
       if (event.target.classList.contains('log-out')) {
         event.preventDefault();
