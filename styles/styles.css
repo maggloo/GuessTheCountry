@@ -375,6 +375,24 @@ border-radius: 50%;
 .current-country {
     text-align: center;
 }
+#my-score {
+    display: inline-block;
+}
+.updateScore {
+    border: none;
+    height: 30px;
+    margin: 10px;;
+    cursor: pointer;
+    border-radius: 45px;
+    font-family: "Roboto", sans-serif;
+    font-weight: bold;
+    color: white;
+    font-size: 13px;
+    background-image: linear-gradient(
+        to right,
+        #ee7752, #e73c7e
+        );
+}
 
 
 
