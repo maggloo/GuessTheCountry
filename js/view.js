@@ -185,6 +185,7 @@ function ModuleView() {
 
     this.getFlags = function(regionCodes, namesInRussian, name, regionsObjArray) {
       score = 0;
+      counter = 0;
       region_list = regionCodes;
       listOfNamesInRussian = namesInRussian;
       regionsObject = regionsObjArray;
@@ -320,6 +321,7 @@ function ModuleView() {
 
     this.getMap = function(regionData, regionCodes, difference, namesInRussian, regionsObjArray) {
       score = 0;
+      counter = 0;
       region_list = regionCodes;
       listOfNamesInRussian = namesInRussian;
       regionsObject = regionsObjArray;
