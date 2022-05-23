@@ -254,7 +254,7 @@ function ModuleModel () {
     }
 
     this.deleteUser = function(id, mode, select) {
-      myDB.ref(`${mode}/` + `${select}/` + `user_${id}`).remove()
+      myDB.ref(`${mode}/` + `${select}/` + `user_${id.toLowerCase()}`).remove()
       .then(function () {
         console.log("Пользователь удален из коллеции users");
       })
