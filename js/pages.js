@@ -42,21 +42,21 @@ const Menu = {
     <div class="menu-list">
         <div class="mode-type">
             <div>
-                <img src="img/compass-svgrepo-com.svg" alt="Страны">
+                <a href="#region"><img src="img/compass-svgrepo-com.svg" alt="Страны"></a>
                 <div><a href="#region" class="mainmenu__link">Страны</a></div>
             </div>
             <div>
-                <img src="img/flag-svgrepo-com.svg" alt="Флаги">
+                <a href="#flgregion"><img src="img/flag-svgrepo-com.svg" alt="Флаги"></a>
                 <div><a href="#flgregion" class="mainmenu__link">Флаги</a></div>
             </div>
         </div>
         <div class="mode-type">
             <div>
-                <img src="img/settings-gear-svgrepo-com.svg" alt="Опции">
+                <a href="#options"><img src="img/settings-gear-svgrepo-com.svg" alt="Опции"></a>
                 <div><a href="#options" class="mainmenu__link">Опции</a></div>
             </div>
             <div>
-                <img src="img/trophy-award-svgrepo-com.svg" alt="Рекорды">
+                <a href="#records"><img src="img/trophy-award-svgrepo-com.svg" alt="Рекорды"></a>
                 <div><a href="#records" class="mainmenu__link">Рекорды</a></div>
             </div>
         </div>
@@ -129,8 +129,8 @@ const Options = {
           <img src="img/information-info-svgrepo-com.svg" alt="Как играть?">
           <div><a href="#" id="about-more">Как играть?</a></div>                               
       </div>
-      <div class="about-game wrap">
-        <div> Выберите на карте/в поле с флагами запрашиваемую страну или флаг. Если вы нашли нужную страну с 1-2 раза, вы получаете максимально возможное количество очков, а правильно угаданная страна или флаг окрашивается в <span style="color:green"><b>зеленый</b></span> цвет. Если вы указали нужную страну/флаг с 3-4 попытки, то вы получаете в два раза меньше очков, а этот элемент окрашивается в <span style="color:rgb(224, 195, 3)"><b>желтый</b></span> цвет. Если же найти страну у вас получилось только с 5 попыток (и больше), то вы не получите баллы, элемент окрасится в <span style="color:red"><b>красный</b></span>, а после 5 попытки вам будет дана подсказка. Максимальное возможное количество баллов - <b>400</b>. Удачи! </div>      
+      <div class="about-game hidden">
+        <div> Выберите на карте/в поле с флагами запрашиваемую страну или флаг. <br><br> Если вы нашли нужную страну с 1-2 раза, вы получаете максимально возможное количество очков, а правильно угаданная страна или флаг окрашивается в <span style="color:green"><b>зеленый</b></span> цвет.  <br><br> Если вы указали нужную страну/флаг с 3-4 попытки, то вы получаете в два раза меньше очков, а этот элемент окрашивается в <span style="color:rgb(224, 195, 3)"><b>желтый</b></span> цвет.  <br><br> Если же найти страну у вас получилось только с 5 попыток (и больше), то вы не получите баллы, элемент окрасится в <span style="color:red"><b>красный</b></span>, а после 5 попытки вам будет дана подсказка. Максимальное возможное количество баллов - <b>400</b>.  <br><br> Удачи! </div>      
       </div>
     </div>   
 </div>
@@ -265,7 +265,7 @@ const Game = {
                 </div> 
                 <div class="map-window">
                     <p class="info" id="country-find"></p>  
-                    <p class="info">Ваш счет: <span id="score" class="maps">0</span></p>             
+                    <div class="info" id="my-score">Ваш счет: <span id="score" class="maps">0</span></div><button class="updateScore">В рекорды!</button><span class="alert" style="color: red"></span>       
                     <div class="current-country info"></div>
                     <div id="chartdiv" class="map"></div> 
                 </div> 
@@ -289,7 +289,7 @@ const Flags = {
                 </div> 
                 <div class="map-window">
                     <p id="country-find" class="info"></p>
-                    <p class="info">Ваш счет: <span id="score" class="flags">0</span></p>    
+                    <div class="info"  id="my-score">Ваш счет: <span id="score" class="flags">0</span></div> <button class="updateScore">В рекорды!</button> <span class="alert" style="color: red"></span>  
                     <p class="current-country info"></p>
                     <div id="chartdiv"></div> 
                 </div> 
