@@ -1,7 +1,6 @@
 function ModuleView() {
     let that = this;
     let myModuleContainer = null;
-    let menu = null;
     let contentContainer = null;
     let routesObj = null;
     let routeName = null;
@@ -126,19 +125,6 @@ function ModuleView() {
       }
     }
 
-    this.toggleState = function(sounds, music) {    //отобразить актуальные положения свитчеров в опциях
-      let musicToggle = document.getElementById('checkMusic');
-      musicToggle.checked = music.checkMusic;
- 
-      let soundsToggle = document.getElementById('checkSounds');
-      soundsToggle.checked = sounds.checkSounds;
-    }
-
-    this.toggleAbout = function() {       //скрыть/открыть в опциях инфу об игре
-      let readMore = contentContainer.querySelector(".about-game");
-      readMore.classList.toggle('hidden');     
-    }
-
     this.playSound = function(sound) {
       if (permitSounds) {
         switch (sound) {
@@ -158,6 +144,19 @@ function ModuleView() {
       }
     }
 
+    this.toggleState = function(sounds, music) {    //отобразить актуальные положения свитчеров в опциях
+      let musicToggle = document.getElementById('checkMusic');
+      musicToggle.checked = music.checkMusic;
+ 
+      let soundsToggle = document.getElementById('checkSounds');
+      soundsToggle.checked = sounds.checkSounds;
+    }
+
+    this.toggleAbout = function() {       //скрыть/открыть в опциях инфу об игре
+      let readMore = contentContainer.querySelector(".about-game");
+      readMore.classList.toggle('hidden');     
+    }
+    
     this.changeMode = function(newButton, newClassName, classTextContent) {   //изменить значения селекта и кнопки на стр рекордов
       let button = contentContainer.querySelector("#change-type");
       let className = contentContainer.querySelector('#mode-name');
@@ -167,7 +166,7 @@ function ModuleView() {
       className.textContent = classTextContent;      
     }
 
-    this.swithForm = function(){        //поменять форму регистрации/логина
+    this.swithForm = function() {        //поменять форму регистрации/логина
       myModuleContainer.querySelectorAll('.alert').forEach(alert => alert.textContent = '');
       myModuleContainer.querySelectorAll('.form').forEach(form =>  form.classList.toggle('hidden'));
     }
@@ -182,6 +181,91 @@ function ModuleView() {
         return element.alpha2 === id.toLowerCase();   //возвращает объект страны 
       });
       showElement.innerHTML = `<strong>${found.name}</strong>`;
+    }
+
+    this.getFlags = function(regionCodes, namesInRussian, name, regionsObjArray) {
+      score = 0;
+      region_list = regionCodes;
+      listOfNamesInRussian = namesInRussian;
+      regionsObject = regionsObjArray;
+      scoreContainer = myModuleContainer.querySelector("#score"); 
+      let flagsContainer = contentContainer.querySelector('#chartdiv');
+      countryListContainer = myModuleContainer.querySelector("#country-list");
+      countryFindContainer = myModuleContainer.querySelector("#country-find"); 
+      this.showCountryList(name);
+      flagsContainer.style.height = 'auto';
+      flagsContainer.style.padding = '2%';
+      flagsContainer.style.textAlign = 'center';
+      randomCnt = this.getRandomCountry();    //получаем рандомную страну при первой загрузке
+
+      (() => {        //подгрузка флагов
+        for (let i = 0; i <  region_list.length; i++) {
+            const img = new Image();
+              img.src = `https://cdn.jsdelivr.net/npm/world_countries_lists@2.5.1/data/flags/128x128/${region_list[i].toLowerCase()}.png`;
+              img.classList.add("flag-img");
+              img.id = `${region_list[i]}`;
+              flagsContainer.append(img);
+        }
+      })();
+    }
+
+    this.checkFlag = function(id) {     
+      this.showAlert("");
+      let imgs = myModuleContainer.querySelectorAll(`.flag-img`); 
+      flagImg =  myModuleContainer.querySelector(`#${id}`);     //конкретный выбранный флаг
+
+      this.showCurrentName(id);    //на каждый клик отображаем название страны, по которой кликнули
+
+      if (counter === 4) {    //анимация флага нужной страны спустя 5 кликов
+        imgs.forEach(element => {
+          if (element.id === randomCnt) {
+            element.style.animation = "hint 0.5s linear alternate-reverse infinite";
+          }
+        });
+        this.playSound('hint');
+      }
+
+        if (randomCnt === id) {            //логика если код флага по которому нажали совпадает с кодом нужной страны
+          if (counter < 2) {
+            flagImg.style.backgroundColor = "green";  
+            score = score + 400 / listOfNamesInRussian.length;        
+            this.updateScore(score); 
+            counter = 0;
+          } else if (counter < 4) {      
+            flagImg.style.backgroundColor = "yellow"; 
+            score = score + (400 / listOfNamesInRussian.length) / 2;
+            this.updateScore(score); 
+            counter = 0;
+          } else {     
+            flagImg.style.animation = 'none';
+            flagImg.style.backgroundColor = "red"; 
+            counter = 0;
+          }
+          flagImg.style.opacity = "0.3"; 
+          this.playSound('correct');
+                  
+          this.deleteCountryFromList();  //удалить страну, которая уже была загадана
+      
+          if (region_list.length) {
+            randomCnt = that.getRandomCountry();      // получаем рандомную страну и отображаем
+          } else {
+            this.showGameOver();
+          }         
+                 
+        } else {      
+          if (region_list.includes(id)) {
+            counter++;                  
+          }        
+        }      
+    }
+
+    this.showCountryList = function(name) {       //отображение названия региона и списка стран на русском
+      myModuleContainer.querySelector("#region-name").innerHTML = `${name}`;
+      countryListContainer.innerHTML = `Список стран: ${listOfNamesInRussian.join(", ")} <i>(${listOfNamesInRussian.length})</i>`;   
+    }
+
+    this.showGameOver = function() {
+      showElement.innerHTML =  `<strong>Вы нашли все страны!</strong>`;
     }
 
     this.initializeMap = function() {  
@@ -234,91 +318,8 @@ function ModuleView() {
       indicator.show();
     }
 
-    this.getFlags = function(regionCodes, namesInRussian, name, regionsObjArray) {
-      region_list = regionCodes;
-      listOfNamesInRussian = namesInRussian;
-      regionsObject = regionsObjArray;
-      scoreContainer = myModuleContainer.querySelector("#score"); 
-      let flagsContainer = contentContainer.querySelector('#chartdiv');
-      countryListContainer = myModuleContainer.querySelector("#country-list");
-      countryFindContainer = myModuleContainer.querySelector("#country-find"); 
-      
-      this.showCountryList(name);
-      flagsContainer.style.height = 'auto';
-      flagsContainer.style.padding = '2%';
-      flagsContainer.style.textAlign = 'center';
-      randomCnt = this.getRandomCountry();    //получаем рандомную страну при первой загрузке
-
-      (() => {        //подгрузка флагов
-        for (let i = 0; i <  region_list.length; i++) {
-            const img = new Image();
-              img.src = `https://cdn.jsdelivr.net/npm/world_countries_lists@2.5.1/data/flags/128x128/${region_list[i].toLowerCase()}.png`;
-              img.classList.add("flag-img");
-              img.id = `${region_list[i]}`;
-              flagsContainer.append(img);
-        }
-      })();
-    }
-
-    this.showCountryList = function(name) {       //отображение названия региона и списка стран на русском
-      myModuleContainer.querySelector("#region-name").innerHTML = `${name}`;
-      countryListContainer.innerHTML = `Список стран: ${listOfNamesInRussian.join(", ")} <i>(${listOfNamesInRussian.length})</i>`;   
-    }
-
-    this.checkFlag = function(id) {     
-      let imgs = myModuleContainer.querySelectorAll(`.flag-img`); 
-      flagImg =  myModuleContainer.querySelector(`#${id}`);     //конкретный выбранный флаг
-
-      this.showCurrentName(id);    //на каждый клик отображаем название страны, по которой кликнули
-
-      if (counter === 4) {    //анимация флага нужной страны спустя 5 кликов
-        imgs.forEach(element => {
-          if (element.id === randomCnt) {
-            element.style.animation = "hint 0.5s linear alternate-reverse infinite";
-          }
-        });
-        this.playSound('hint');
-      }
-
-        if (randomCnt === id) {            //логика если код флага по которому нажали совпадает с кодом нужной страны
-          if (counter < 2) {
-            flagImg.style.backgroundColor = "green";  
-            score = score + 400 / listOfNamesInRussian.length;        
-            this.updateScore(score); 
-            counter = 0;
-          } else if (counter < 4) {      
-            flagImg.style.backgroundColor = "yellow"; 
-            score = score + (400 / listOfNamesInRussian.length) / 2;
-            this.updateScore(score); 
-            counter = 0;
-          } else {     
-            flagImg.style.animation = 'none';
-            flagImg.style.backgroundColor = "red"; 
-            counter = 0;
-          }
-          flagImg.style.opacity = "0.3"; 
-          this.playSound('correct');
-                  
-          this.deleteCountryFromList();  //удалить страну, которая уже была загадана
-      
-          if (region_list.length) {
-            randomCnt = that.getRandomCountry();      // получаем рандомную страну и отображаем
-          } else {
-            this.showGameOver();
-          }         
-                 
-        } else {      
-          if (region_list.includes(id)) {
-            counter++;                  
-          }        
-        }      
-    }
-
-    this.showGameOver = function() {
-      showElement.innerHTML =  `<strong>Вы нашли все страны!</strong>`;
-    }
-
     this.getMap = function(regionData, regionCodes, difference, namesInRussian, regionsObjArray) {
+      score = 0;
       region_list = regionCodes;
       listOfNamesInRussian = namesInRussian;
       regionsObject = regionsObjArray;
@@ -435,6 +436,7 @@ function ModuleView() {
     regionSeries.mapPolygons.template.events.on("click", function(ev) {     //вызвать метод обработки кликов
       let id = ev.target._dataItem.dataContext.id;    //код выбранной страны
       that.showCurrentName(id);
+      that.showAlert("");
       
       if (counter === 4) {    //вызвать анимацию если 5 кликов
         animating();
