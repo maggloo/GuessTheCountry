@@ -18,6 +18,10 @@ const Login = {
             <div class="form visible"> 
                 <form class="login-form">
                 <p class="form-name">Войти</p>
+                <div class="test-account"> Test account:
+                    <div> Email: test@mail.com </div>
+                    <div> Password: 123456 </div>
+                </div>
                 <input id="login-email" type="text" placeholder="Email"/>
                 <input id="login-password" type="password" placeholder="Пароль"/>          
                 <button class="btn-login-user" id="login-user">Войти</button>
