@@ -13,5 +13,6 @@ My first project using only native JS, intented for those who are interested in 
 * HTML
 * amCharts
 * firebase
+* MVC atchitecture 
 
-The project includes user database via firebase, and works with maps and map data via amCharts.
+The project includes user database via firebase, and works with maps and map data via amCharts, implementing MVC atchitecture.
