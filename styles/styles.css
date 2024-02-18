@@ -106,9 +106,20 @@ body {
     outline:none;
 }
 
+.login-form .test-account {
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    color: grey;
+}
+
 .form-name {
     font-size: 25px;
     font-weight: bold;
+}
+
+.login-form .form-name {
+    margin-bottom: 0;
 }
 
 /* МЕНЮ */
